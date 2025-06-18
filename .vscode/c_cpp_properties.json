@@ -3,8 +3,8 @@
       {
         "name": "Mac",
         "includePath": [
-          "${workspaceFolder}/dependencies/SFML/include",
-          "${workspaceFolder}/**"
+          "${workspaceFolder}/**",
+          "${workspaceFolder}/dependencies/SFML/include"
         ],
         "defines": [],
         "macFrameworkPath": [],

@@ -2,8 +2,11 @@
 
 mkdir -p bin
 
-g++ src/main.cpp -o bin/sfml-app \
+FILES=$(find src -name "*.cpp")
+
+g++ $FILES -o bin/sfml-app \
   -std=c++17 \
+  -Iinclude \
   -Idependencies/SFML/include \
   -Idependencies/miniaudio \
   -Ldependencies/SFML/lib \
