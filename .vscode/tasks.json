@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build SFML App",
+        "type": "shell",
+        "command": "g++",
+        "args": [
+          "-std=c++17",
+          "src/main.cpp",
+          "-o",
+          "bin/sfml-app",
+          "-I${workspaceFolder}/dependencies/SFML/include",
+          "-L${workspaceFolder}/dependencies/SFML/lib",
+          "-lsfml-graphics",
+          "-lsfml-window",
+          "-lsfml-system",
+          "-lsfml-audio"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": ["$gcc"],
+        "detail": "Bygger SFML-app med lokale dependencies"
+      }
+    ]
+  }
+  

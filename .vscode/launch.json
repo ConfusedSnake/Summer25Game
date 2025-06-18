@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Kjør SFML App",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/bin/sfml-app",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [
+          {
+            "name": "DYLD_LIBRARY_PATH",
+            "value": "${workspaceFolder}/dependencies/SFML/lib"
+          }
+        ],
+        "preLaunchTask": "Build SFML App",
+        "MIMode": "lldb",
+        "setupCommands": [
+          {
+            "description": "Aktiver auto-formattering",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          }
+        ]
+      }
+    ]
+  }
+  
