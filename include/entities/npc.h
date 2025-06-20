@@ -2,9 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "entities/bullet.h"
-#include "entities/npc.h"
 
-class Player{
+
+class NPC{
     private:
     sf::Texture texture;
     sf::Sprite sprite;
@@ -12,17 +12,14 @@ class Player{
     float spriteScalar = 1.0f;
 
     sf::RectangleShape boundingRectangle;
-    Mag mag;
 
     public:
     sf::Texture& getTexture() {return texture;}
     sf::Sprite& getSprite() {return sprite;}
     sf::RectangleShape& getBoundingRectangle(){return boundingRectangle;}
-    Mag& getMag() {return mag;}
-    
-    Player(std::string spritePath, int XIndex, int YIndex);
+
+    NPC(std::string spritePath, int XIndex, int YIndex);
 
     void handleMovement();
-    void handleShooting(NPC& enemy, bool& canShoot);
     void draw(sf::RenderWindow& window);
 };

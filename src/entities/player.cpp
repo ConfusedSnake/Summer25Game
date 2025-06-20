@@ -1,31 +1,55 @@
 #include "entities/player.h"
 
-Player::Player(std::string spritePath, int XIndex, int YIndex){
-    if(playerTexture.loadFromFile(spritePath)){
+Player::Player(std::string spritePath, int XIndex, int YIndex) : mag(10){
+    if(texture.loadFromFile(spritePath)){
         std::cout << "Player Images Loaded" << std::endl;
-        playerSprite.setTexture(playerTexture);
-
-        int spriteSize = 64;
-        playerSprite.setTextureRect(sf::IntRect(spriteSize * XIndex, spriteSize*YIndex, spriteSize, spriteSize));
-        playerSprite.scale(sf::Vector2f(1,1));
+        sprite.setTexture(texture);
+        sprite.setTextureRect(sf::IntRect(spriteSize * XIndex, spriteSize*YIndex, spriteSize, spriteSize));
+        sprite.scale(sf::Vector2f(spriteScalar,spriteScalar));
 
     } else {std::cout << "Player image failed to load" << std::endl;}
+
+    boundingRectangle.setFillColor(sf::Color::Transparent);
+    boundingRectangle.setOutlineColor(sf::Color::Red);
+    boundingRectangle.setOutlineThickness(2);
+    boundingRectangle.setSize(sf::Vector2f(spriteSize, spriteSize));
+    boundingRectangle.scale(sprite.getScale());
 }
 
 void Player::handleMovement(){
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        playerSprite.move(0.f, -0.1f);
+        sprite.move(0.f, -0.1f);
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        playerSprite.move(-0.1f, 0.f);
+        sprite.move(-0.1f, 0.f);
     
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        playerSprite.move(0.f, 0.1f);
+        sprite.move(0.f, 0.1f);
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        playerSprite.move(0.1f, 0.f);
+        sprite.move(0.1f, 0.f);
+
+    boundingRectangle.setPosition(sprite.getPosition());
 }
 
 void Player::draw(sf::RenderWindow& window){
-    window.draw(playerSprite);
+    window.draw(sprite);
+    window.draw(boundingRectangle);
 }
+
+void Player::handleShooting(NPC& enemy, bool& canShoot) {
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canShoot) {
+        auto newBullet = std::make_unique<Bullet>();
+        newBullet->setInitPosition(getSprite().getPosition());
+        newBullet->setDirection(enemy.getSprite().getPosition());
+
+        if (getMag().tryAddBullet(std::move(newBullet))) {
+            canShoot = false;
+        } else if(canShoot == false){
+            std::cout << "Magasin fullt!" << std::endl;
+        }
+    }
+    getMag().updateBullets();
+}
+
