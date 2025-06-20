@@ -5,7 +5,7 @@
 
 class Bullet{
     private:
-    float bulletSpeed;
+    float bulletSpeed = 400.0f;
     sf::Vector2f direction;
 
     public:
@@ -14,7 +14,7 @@ class Bullet{
     
     void setDirection(sf::Vector2f dir);
     void setInitPosition(sf::Vector2f pos);
-    void bulletMove();
+    void bulletMove(float deltaTime);
     void draw(sf::RenderWindow& window);
 };
 
@@ -23,7 +23,6 @@ class Mag{
     private:
     size_t capacity;
     std::vector<std::unique_ptr<Bullet>> bullets;
-    
 
     public:
     Mag(size_t cap);
@@ -31,6 +30,6 @@ class Mag{
     
     bool tryAddBullet(std::unique_ptr<Bullet> bullet);
     std::vector<std::unique_ptr<Bullet>>& getBullets() { return bullets; }
-    void updateBullets();
+    void updateBullets(float deltaTime);
     void draw(sf::RenderWindow& window);
 };

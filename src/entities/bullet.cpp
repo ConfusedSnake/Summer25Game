@@ -2,7 +2,6 @@
 
 Bullet::Bullet() {
     bull = sf::RectangleShape(sf::Vector2f(10.f, 5.f));
-    bulletSpeed = 1.f;
     direction = sf::Vector2f(0.f, 0.f);
 }
 
@@ -15,8 +14,8 @@ void Bullet::setInitPosition(sf::Vector2f pos){
     bull.setPosition(pos);
 }
 
-void Bullet::bulletMove(){
-    bull.move(direction*bulletSpeed);
+void Bullet::bulletMove(float deltaTime){
+    bull.move(direction*bulletSpeed*deltaTime);
 }
 
 void Bullet::draw(sf::RenderWindow& window){
@@ -25,14 +24,15 @@ void Bullet::draw(sf::RenderWindow& window){
 Mag::Mag(size_t cap) : capacity(cap) {}
 
 bool Mag::tryAddBullet(std::unique_ptr<Bullet> bullet) {
-    if (bullets.size() < capacity) {
-        bullets.push_back(std::move(bullet));
-        return true;
-    }
-    return false;
+    // if (bullets.size() < capacity) {
+    //     bullets.push_back(std::move(bullet));
+    //     return true;
+    // }
+    bullets.push_back(std::move(bullet));
+    return true;
 }
 
-void Mag::updateBullets() {
+void Mag::updateBullets(float deltaTime) {
     bullets.erase(
         std::remove_if(bullets.begin(), bullets.end(),
             [](const std::unique_ptr<Bullet>& b) {
@@ -43,7 +43,7 @@ void Mag::updateBullets() {
     );
 
     for (auto& bullet : bullets) {
-        bullet->bulletMove();
+        bullet->bulletMove(deltaTime);
     }
 }
 

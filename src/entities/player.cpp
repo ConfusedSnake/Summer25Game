@@ -16,18 +16,18 @@ Player::Player(std::string spritePath, int XIndex, int YIndex) : mag(10){
     boundingRectangle.scale(sprite.getScale());
 }
 
-void Player::handleMovement(){
+void Player::handleMovement(float deltaTime){
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        sprite.move(0.f, -0.1f);
+        sprite.move(0.f, -(speed * deltaTime));
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        sprite.move(-0.1f, 0.f);
+        sprite.move(-(speed * deltaTime), 0.f);
     
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        sprite.move(0.f, 0.1f);
+        sprite.move(0.f, speed * deltaTime);
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        sprite.move(0.1f, 0.f);
+        sprite.move(speed * deltaTime, 0.f);
 
     boundingRectangle.setPosition(sprite.getPosition());
 }
@@ -37,7 +37,7 @@ void Player::draw(sf::RenderWindow& window){
     window.draw(boundingRectangle);
 }
 
-void Player::handleShooting(NPC& enemy, bool& canShoot) {
+void Player::handleShooting(NPC& enemy, bool& canShoot, float deltaTime) {
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canShoot) {
         auto newBullet = std::make_unique<Bullet>();
@@ -45,11 +45,22 @@ void Player::handleShooting(NPC& enemy, bool& canShoot) {
         newBullet->setDirection(enemy.getSprite().getPosition());
 
         if (getMag().tryAddBullet(std::move(newBullet))) {
-            canShoot = false;
+            //canShoot = false;
         } else if(canShoot == false){
             std::cout << "Magasin fullt!" << std::endl;
         }
     }
-    getMag().updateBullets();
+    getMag().updateBullets(deltaTime);
 }
 
+
+
+void Player::setRole(std::unique_ptr<DutyBase> newRole) {
+    currentRole = std::move(newRole);
+}
+
+void Player::performRoleAction() {
+    if (currentRole) {
+        currentRole->performAction(*this);
+    }
+}
